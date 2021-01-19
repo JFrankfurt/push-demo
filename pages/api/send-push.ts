@@ -1,17 +1,10 @@
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  writeFileSync,
-} from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { tmpdir } from 'os'
-import { resolve, sep } from 'path'
+import { resolve } from 'path'
 import webpush from 'web-push'
 
-const DIR = mkdtempSync(`${tmpdir()}${sep}`)
-const DATA_PATH = resolve(`${DIR}/data.json`)
+const DIR = `/tmp/push-data`
+let DATA_PATH = resolve(`${DIR}/data.json`)
 
 const triggerPushMsg = function (
   subscription: webpush.PushSubscription,
@@ -22,7 +15,9 @@ const triggerPushMsg = function (
     if (err.statusCode === 404 || err.statusCode === 410) {
       console.log('Subscription has expired or is no longer valid: ', err)
 
-      const data = JSON.parse(readFileSync(DATA_PATH, 'utf8'))
+      const data: Record<string, webpush.PushSubscription> = JSON.parse(
+        readFileSync(DATA_PATH, 'utf8')
+      )
       delete data[subscription.endpoint]
       writeFileSync(DATA_PATH, JSON.stringify(data), 'utf8')
     } else {
@@ -35,12 +30,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const DIR = `/tmp/push-data`
-  const DATA_PATH = resolve(`${DIR}/data.json`)
   if (!existsSync(DIR)) {
     mkdirSync(DIR)
     writeFileSync(DATA_PATH, JSON.stringify({}), 'utf8')
-    console.log('created new data file: ', DATA_PATH)
+    DATA_PATH = resolve(`${DIR}/data.json`)
   }
   try {
     const pushData = JSON.stringify(req.body)

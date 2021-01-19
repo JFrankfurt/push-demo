@@ -3,14 +3,18 @@ self.addEventListener('install', function (event) {
 })
 
 self.addEventListener('push', function (event) {
-  const data = JSON.parse(event.data.json())
-  console.log('received push event', event, data)
-  const title = `message from ${data.username}`
+  const eventData = event.data.json()
+  const data = typeof eventData === 'string' ? JSON.parse(eventData) : eventData
+  const { message, username } = data
+
+  const title = `message from ${username}`
   const options = {
-    body: data.message,
-    icon: '/favicon.png',
+    body: message,
+    lang: 'en',
+    icon: '/image192.png',
     image: '/image.png',
     sound: '/audio.mp3',
+    timestamp: Date.parse('01 Jan 2021 00:00:00'),
     vibrate: [
       500,
       110,
@@ -32,6 +36,21 @@ self.addEventListener('push', function (event) {
     ],
   }
 
-  const promiseChain = self.registration.showNotification(title, options)
-  event.waitUntil(promiseChain)
+  if ('actions' in Notification.prototype) {
+    options.actions = [
+      {
+        action: 'coffee-action',
+        title: 'Coffee',
+        icon: '/action1.png',
+      },
+      {
+        action: 'doughnut-action',
+        title: 'Doughnut',
+        icon: '/action2.png',
+      },
+    ]
+  }
+  new Notification(title, options)
+  // const promiseChain = self.registration.showNotification(notification)
+  // event.waitUntil(promiseChain)
 })
