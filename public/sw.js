@@ -1,4 +1,4 @@
-self.addEventListener('install', function (event) {
+self.addEventListener('install', function () {
   console.log('Hello world from the Service Worker 🤙')
 })
 
@@ -50,7 +50,7 @@ self.addEventListener('push', function (event) {
       },
     ]
   }
-  new Notification(title, options)
-  // const promiseChain = self.registration.showNotification(notification)
-  // event.waitUntil(promiseChain)
+
+  const promiseChain = self.registration.showNotification(title, options)
+  event.waitUntil(promiseChain)
 })
