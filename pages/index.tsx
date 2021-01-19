@@ -22,6 +22,10 @@ const sectionCss = css`
   margin: 1em 0;
 `
 
+const titleCss = css`
+  font-family: monospace;
+`
+
 function urlBase64ToUint8Array(base64String: string) {
   var padding = '='.repeat((4 - (base64String.length % 4)) % 4)
   var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
@@ -97,7 +101,7 @@ const Index = () => {
   return (
     <Layout>
       <main css={rootCss}>
-        <pre>check the console for logs and to see what's happening 👾</pre>
+        <div css={titleCss}>check the console to see what's happening 👾</div>
         <section css={sectionCss}>
           <div>notification permission state: {permission}</div>
           <button onClick={acceptPush} disabled={permission === 'granted'}>
