@@ -1,11 +1,16 @@
-import webpush from 'web-push'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { readFileSync, writeFileSync } from 'fs'
 import { resolve } from 'path'
-
-const DATA_PATH = resolve('pages/data.json')
+import webpush from 'web-push'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const DIR = `/tmp/push-data`
+  const DATA_PATH = resolve(`${DIR}/data.json`)
+  if (!existsSync(DIR)) {
+    mkdirSync(DIR)
+    writeFileSync(DATA_PATH, JSON.stringify({}), 'utf8')
+    console.log('created new data file: ', DATA_PATH)
+  }
   try {
     console.log('saved push subscription: ', req.body)
     webpush.setVapidDetails(
