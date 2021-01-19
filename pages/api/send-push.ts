@@ -42,7 +42,7 @@ export default async function handler(
     const data: Record<string, webpush.PushSubscription> = JSON.parse(
       readFileSync(DATA_PATH, 'utf8')
     )
-    console.log('handling push send request: ', data)
+    console.log('handling push send request')
     Object.values(data).forEach((subsciption: webpush.PushSubscription) => {
       promises.push(triggerPushMsg(subsciption, pushData))
       console.log('sending push notif: ', pushData)

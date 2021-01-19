@@ -97,14 +97,17 @@ const Index = () => {
   return (
     <Layout>
       <main css={rootCss}>
+        <pre>check the console for logs and to see what's happening 👾</pre>
         <section css={sectionCss}>
           <div>notification permission state: {permission}</div>
           <button onClick={acceptPush} disabled={permission === 'granted'}>
-            give permission
+            step #1 - give permission
           </button>
         </section>
         <section css={sectionCss}>
-          <button onClick={subscribeToPush}>subscribe to push service</button>
+          <button onClick={subscribeToPush}>
+            Step #2 - subscribe to push service
+          </button>
         </section>
         <section css={sectionCss}>
           <input
@@ -118,10 +121,12 @@ const Index = () => {
             value={message}
             onChange={({ target: { value } }) => setMessage(value)}
           />
-          <button onClick={sendPush}>send push</button>
+          <button onClick={sendPush}> step #3 - send push! 🎉</button>
         </section>
         <section css={sectionCss}>
-          <button onClick={cleanup}>clean up sw registration</button>
+          <button onClick={cleanup}>
+            clean up sw registration (goto step #2)
+          </button>
         </section>
       </main>
     </Layout>
