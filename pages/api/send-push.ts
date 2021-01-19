@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { readFileSync, writeFileSync } from 'fs'
 import { resolve } from 'path'
 
-const DATA_PATH = resolve('public/data.json')
+const DATA_PATH = resolve('pages/data.json')
 
 const triggerPushMsg = function (
   subscription: webpush.PushSubscription,
